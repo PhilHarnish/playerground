@@ -1,15 +1,4 @@
 
-
-var ParameterSets = {
-LiveVideo1: {
-  __title: "Video",
-  __description: "Short video of sheep (live)",
-  video_id: "Qy8jF367POg"
-}
-};
-var ParameterSetList = [];
-
-
 /*
 http://pg.youtube.com/swf/cps.swf?BASE_YT_URL=http://www.youtube.com/
 &video_id=p3RDj4Xp4-k&hl=en&border=0&autoplay=0&color1=&color2=&egm=0&fs=0
@@ -20,109 +9,74 @@ http://pg.youtube.com/swf/cps.swf?BASE_YT_URL=http://www.youtube.com/
 &load_modules=1
 */
 
-/*
-
-{
-  application: {
-    parameters: [
-      {
-        title: 't',
-        description: 'etc'
-      },
-      {
-        meta: [
-          {
-            key: 'value'
-          }
-        ]
+var Application = function () {
+  return Application.add.apply(Application, arguments);
+};
+Application.__proto__ = {
+  __proto__: Application.__proto__,
+  
+  add: function (name, cons, props) {
+    var f = function() {
+      cons.apply(f, arguments)
+    };
+    for (var key in props) {
+      if (props.hasOwnProperty(key) && key in this) {
+        props[key].__proto__ = this[key];
       }
-    ]
-  }
-}
-
-*/
-
-
-var Playground = function () {
-  var urlParameters = ParameterSets['UrlParameters'] =
-    this.parametersFromUrl(document.location.search);
-  trace("Initializing playground.\nGiven URL parameters: ", urlParameters);
-  trace("Loaded params: ", ParameterSets);
-  $("body").template({
-    Playground: {
-      parameters: this.processParameters(ParameterSets)
     }
-  }).behavior(Behaviors);
-  this.restoreStatus();
-};
-Playground.get = function () {
-  var pg = $.proto(Playground);
-  Playground.get = function () {
-    return pg;
+    f.__proto__ = $.thread(props, this);
+    return this[name] = f;
+  },
+  
+  behavior: {
+    a: 'foo',
+    b: 'bar'
   }
-  return Playground.get();
 };
-Playground.prototype = {
+
+var Playerground = new Application("Playerground",
+function () {
+  trace("Behavior:", this.behavior);
+},
+{
   status: 'playground loaded',
 
-  parametersFromUrl: function(href) {
-    var parameters = {
-      __title: "url parameters",
-      __description: href,
-    };
-    if (href.indexOf("?") >= 0) {
-      var p = href.substring(1).split("&");
-      for (var i = 0; i < p.length; i++) {
-        var kv = p[i].split("=");
-        parameters[kv[0]] = kv[1];
+  run: function () {
+    var urlParameters = ParameterSets['UrlParameters'] =
+      this.parametersFromUrl(document.location.search);
+    trace("Initializing playground.\nGiven URL parameters: ", urlParameters);
+    trace("Loaded params: ", ParameterSets);
+    $("body").template({
+      Playerground: {
+        parameters: this.processParameters(ParameterSets)
       }
-    }
-    return parameters;
+    }).behavior(Behaviors);
+    this.restoreStatus();
   },
-  
-  layoutParameters: function(src) {
-    var layout = {
-      meta: [],
-    };
-    for (var k in src) {
-      if (k.substr(0, 2) == "__") {
-        layout[k.substr(2)] = src[k];
-      } else {
-        layout.meta.push({key: k, value: src[k]});
-      }
-    }
-    return layout;
-  },
-  
-  processParameters: function(group) {
-    var ret = [];
-    for (var name in group) {
-      // TODO: Register parameters
-      var namedSet = group[name];
-      ret.push(this.layoutParameters(namedSet));
-    }
-    return ret;
-  },
-  
-  setStatus: function(status, shallow) {
-    if (!shallow) {
-      this.status = status;
-    }
-    $("#status").text(status);
-  },
-  restoreStatus: function() {
-    $("#status").text(this.status);
+
+  behavior: {
+    b: 'baz'
   }
-};
+});
+
+Playerground.add("Stage",
+function () {
+  //
+},
+{
+  // Methods
+});
 
 var Behaviors = {
   "*[title]": {
     hover: [
       function () {
-        Playground.get().setStatus($(this).attr('title'),true);        
+        Playerground.get().setStatus($(this).attr('title'),true);
+        this.setStatus($(this.element).attr('title'), true);
       },
       function () {
-        Playground.get().restoreStatus();
+        Playerground.get().restoreStatus();
+        this.restoreStatus();
       }
     ]
   },
@@ -154,10 +108,10 @@ var Behaviors = {
     },
     hover: [
       function () {
-        Playground.get().setStatus($(this).attr('title'), true);        
+        Playerground.get().setStatus($(this).attr('title'), true);        
       },
       function () {
-        Playground.get().restoreStatus();
+        Playerground.get().restoreStatus();
         $(this).parent().parent().removeClass('delete');
         $(this).text("x");
       }
@@ -166,6 +120,8 @@ var Behaviors = {
   // Playground
   "#bin h2": {
     click: function () {
+      trace("This is ", this);
+      trace("$(this) is ", $(this));
       $(this).children().toggle();
       $(this).prev().toggle();
     }
@@ -185,5 +141,91 @@ var Behaviors = {
 /**
  * Setup
  */
-// Launches app after page loads
-$(Playground.get);
+$(Playerground);
+
+/*
+parametersFromUrl: function(href) {
+  var parameters = {
+    __title: "url parameters",
+    __description: href,
+  };
+  if (href.indexOf("?") >= 0) {
+    var p = href.substring(1).split("&");
+    for (var i = 0; i < p.length; i++) {
+      var kv = p[i].split("=");
+      parameters[kv[0]] = kv[1];
+    }
+  }
+  return parameters;
+},
+
+layoutParameters: function(src) {
+  var layout = {
+    meta: [],
+  };
+  for (var k in src) {
+    if (k.substr(0, 2) == "__") {
+      layout[k.substr(2)] = src[k];
+    } else {
+      layout.meta.push({key: k, value: src[k]});
+    }
+  }
+  return layout;
+},
+
+processParameters: function(group) {
+  var ret = [];
+  for (var name in group) {
+    // TODO: Register parameters
+    var namedSet = group[name];
+    ret.push(this.layoutParameters(namedSet));
+  }
+  return ret;
+},
+
+setStatus: function(status, shallow) {
+  if (!shallow) {
+    this.status = status;
+  }
+  $("#status").text(status);
+},
+restoreStatus: function() {
+  $("#status").text(this.status);
+},
+
+
+*/
+
+/*
+var test = {id:"test member", old:"older member"};
+test.func = function (a, b, c) {
+  trace("this is:", this, "with", a, b, c, "and", this.id, this.old);
+};
+
+var testBase = {id:"test base"};
+
+var rewireFunctions = function (obj, newParentThis) {
+  trace("Given object", obj);
+  for (var k in obj) {
+    if (obj[k] instanceof Function) {
+      trace("obj.k is a function", obj, k);
+      obj[k] = makeRewiredClosure(obj[k], newParentThis);
+    }
+  }
+};
+
+var makeRewiredClosure = function(f, newBase) {
+  return function () {
+    var newThis = {
+      element: this,
+    };
+    $.thread(newThis, newBase);
+    f.apply(newThis, arguments);
+  };
+};
+
+test.func(1,2,3);
+rewireFunctions(test, testBase);
+test.func(1,2,3);
+
+*/
