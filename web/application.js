@@ -1,3 +1,4 @@
+var ParameterSets = {};
 
 /*
 http://pg.youtube.com/swf/cps.swf?BASE_YT_URL=http://www.youtube.com/
@@ -28,6 +29,26 @@ Application.__proto__ = {
     return this[name] = f;
   },
   
+  rewireFunctions: function (obj, newParentThis) {
+    trace("Given object", obj);
+    for (var k in obj) {
+      if (obj[k] instanceof Function) {
+        trace("obj.k is a function", obj, k);
+        obj[k] = makeRewiredClosure(obj[k], newParentThis);
+      }
+    }
+  },
+  
+  rewire: function(f, newBase) {
+    return function () {
+      var newThis = {
+        super: this,
+      };
+      $.thread(newThis, newBase);
+      f.apply(newThis, arguments);
+    };
+  },
+  
   behavior: {
     a: 'foo',
     b: 'bar'
@@ -52,6 +73,55 @@ function () {
       }
     }).behavior(Behaviors);
     this.restoreStatus();
+  },
+
+  parametersFromUrl: function(href) {
+    var parameters = {
+      __title: "url parameters",
+      __description: href,
+    };
+    if (href.indexOf("?") >= 0) {
+      var p = href.substring(1).split("&");
+      for (var i = 0; i < p.length; i++) {
+        var kv = p[i].split("=");
+        parameters[kv[0]] = kv[1];
+      }
+    }
+    return parameters;
+  },
+
+  layoutParameters: function(src) {
+    var layout = {
+      meta: [],
+    };
+    for (var k in src) {
+      if (k.substr(0, 2) == "__") {
+        layout[k.substr(2)] = src[k];
+      } else {
+        layout.meta.push({key: k, value: src[k]});
+      }
+    }
+    return layout;
+  },
+
+  processParameters: function(group) {
+    var ret = [];
+    for (var name in group) {
+      // TODO: Register parameters
+      var namedSet = group[name];
+      ret.push(this.layoutParameters(namedSet));
+    }
+    return ret;
+  },
+
+  setStatus: function(status, shallow) {
+    if (!shallow) {
+      this.status = status;
+    }
+    $("#status").text(status);
+  },
+  restoreStatus: function() {
+    $("#status").text(this.status);
   },
 
   behavior: {
@@ -141,57 +211,9 @@ var Behaviors = {
 /**
  * Setup
  */
-$(Playerground);
+$(function(){Playerground.run()});
 
 /*
-parametersFromUrl: function(href) {
-  var parameters = {
-    __title: "url parameters",
-    __description: href,
-  };
-  if (href.indexOf("?") >= 0) {
-    var p = href.substring(1).split("&");
-    for (var i = 0; i < p.length; i++) {
-      var kv = p[i].split("=");
-      parameters[kv[0]] = kv[1];
-    }
-  }
-  return parameters;
-},
-
-layoutParameters: function(src) {
-  var layout = {
-    meta: [],
-  };
-  for (var k in src) {
-    if (k.substr(0, 2) == "__") {
-      layout[k.substr(2)] = src[k];
-    } else {
-      layout.meta.push({key: k, value: src[k]});
-    }
-  }
-  return layout;
-},
-
-processParameters: function(group) {
-  var ret = [];
-  for (var name in group) {
-    // TODO: Register parameters
-    var namedSet = group[name];
-    ret.push(this.layoutParameters(namedSet));
-  }
-  return ret;
-},
-
-setStatus: function(status, shallow) {
-  if (!shallow) {
-    this.status = status;
-  }
-  $("#status").text(status);
-},
-restoreStatus: function() {
-  $("#status").text(this.status);
-},
 
 
 */
