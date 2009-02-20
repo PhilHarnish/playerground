@@ -8,8 +8,11 @@ antipattern.js is not a framework. It is a collection of useful code.
   var behaviors = {};
  
   jQuery.extend({
-    fromHtml: function (html) {
-      return jQuery().setArray(jQuery.clean( [ html ] ));
+    /**
+     * Takes an HTML string and makes it into a jQuery DOM object.
+     */
+    fromHtml: function () {
+      return jQuery().setArray(jQuery.clean(arguments));
     },
     behaviors: function (b) {
       if (b == undefined) {
