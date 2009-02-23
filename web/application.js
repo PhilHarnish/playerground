@@ -14,50 +14,75 @@ var Application = function () {
   return Application.add.apply(Application, arguments);
 };
 Application.__proto__ = {
+	// save a reference to the old __proto__
   __proto__: Application.__proto__,
+  
+  // Application status
+  status: '',
   
   add: function (name, cons, props) {
     var f = function() {
       cons.apply(f, arguments)
     };
+    // Find overriden properties and thread their prototypes
     for (var key in props) {
       if (props.hasOwnProperty(key) && key in this) {
         props[key].__proto__ = this[key];
       }
     }
-    f.__proto__ = $.thread(props, this);
+    //this.rewireFunctions(props.behaviors, this);
+    f.__proto__ = $.thread(props, this);//this.rewire(props, this);
     return this[name] = f;
   },
   
   rewireFunctions: function (obj, newParentThis) {
     trace("Given object", obj);
     for (var k in obj) {
-      if (obj[k] instanceof Function) {
-        trace("obj.k is a function", obj, k);
-        obj[k] = makeRewiredClosure(obj[k], newParentThis);
+      var v = obj[k];
+      if (v instanceof Function) {
+        trace("obj["+k+"] is a function", obj[k]);
+        obj[k] = this.rewire(v, newParentThis);
       }
+      // Recurse
+      this.rewireFunctions(v, newParentThis);
     }
   },
   
   rewire: function(f, newBase) {
+    var t = this;
     return function () {
       var newThis = {
-        super: this,
+        super: t,
       };
       $.thread(newThis, newBase);
       f.apply(newThis, arguments);
     };
   },
   
+  setStatus: function(status) {
+    trace('Super setStatus');
+    this.status = status;
+  },
+  
   behavior: {
-    a: 'foo',
-    b: 'bar'
+    "*[title]": {
+      hover: [
+        function () {
+          trace("New way!");
+          this.setStatus($(this.element).attr('title'), true);
+        },
+        function () {
+          this.restoreStatus();
+        }
+      ]
+    }
   }
 };
 
 var Playerground = new Application("Playerground",
 function () {
   trace("Behavior:", this.behavior);
+  this.run();
 },
 {
   status: 'playground loaded',
@@ -116,7 +141,7 @@ function () {
 
   setStatus: function(status, shallow) {
     if (!shallow) {
-      this.status = status;
+      this.super.setStatus(status);
     }
     $("#status").text(status);
   },
@@ -125,7 +150,6 @@ function () {
   },
 
   behavior: {
-    b: 'baz'
   }
 });
 
@@ -138,6 +162,7 @@ function () {
 });
 
 var Behaviors = {
+  /*
   "*[title]": {
     hover: [
       function () {
@@ -149,7 +174,7 @@ var Behaviors = {
         this.restoreStatus();
       }
     ]
-  },
+  },*/
   // Parameters
   "li span.title": {
     click: function () {
@@ -176,6 +201,7 @@ var Behaviors = {
       }
       return false;
     },
+    /*
     hover: [
       function () {
         Playerground.get().setStatus($(this).attr('title'), true);        
@@ -185,7 +211,7 @@ var Behaviors = {
         $(this).parent().parent().removeClass('delete');
         $(this).text("x");
       }
-    ]
+    ]*/
   },
   // Playground
   "#bin h2": {
@@ -209,9 +235,9 @@ var Behaviors = {
 };
 
 /**
- * Setup
+ * Start
  */
-$(function(){Playerground.run()});
+$(Playerground);
 
 /*
 

@@ -27,9 +27,6 @@ antipattern.js is not a framework. It is a collection of useful code.
       prototype.apply(p, args);
       return p;
     },
-    //instanceOf: function(object, class) {
-    //  return (object.__proto__ == class.prototype);
-    //},
     thread: function() {
       var args = $.iterable(arguments);
       var a = args.shift(), b;
