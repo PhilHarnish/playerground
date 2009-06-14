@@ -1,8 +1,12 @@
+-# See ../helpers/*_helper.rb for most mysterious value defs
+
 !!! XML
 !!! Strict
+/ Source available online http://github.com/PhilHarnish/playerground/
 %html
   %head
-    %title Playerground
+    %title= "Playerground"
     = stylesheets
+    = javascripts(jquery, swfobject)
   %body
     = yield
