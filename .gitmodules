@@ -1,6 +1,3 @@
-[submodule "lib/screw-unit"]
-	path = lib/screw-unit
-	url = git://github.com/nathansobo/screw-unit.git
 [submodule "lib/pure"]
 	path = lib/pure
 	url = git://github.com/pure/pure.git
