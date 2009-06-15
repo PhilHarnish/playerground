@@ -15,6 +15,13 @@ To install from source run the following commands:
 
 After `staticmatic build` completes the `~/playerground/site` directory will contain the generated files. Note that `staticmatic preview` uses local versions of each javascript API dependency. Please download and provide missing javascript files.
 
+To run the spec suite run the following commands:
+
+    # Get dependencies:
+    gem sources -a http://gems.github.com
+    sudo gem install visionmedia-jspec
+    jspec run
+
 [1]: http://code.google.com/apis/ajax/playground/?exp=youtube
 [2]: http://code.google.com/apis/youtube/player_parameters.html
 [3]: http://code.google.com/apis/youtube/js_api_reference.html
