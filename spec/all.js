@@ -1,2 +1,2 @@
 JSpec
-.exec(BASE + 'small/spec.js')
+.exec(BASE + 'jspec/spec.js')
