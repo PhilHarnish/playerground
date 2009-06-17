@@ -4,3 +4,6 @@
 [submodule "lib/jspec"]
 	path = lib/jspec
 	url = git://github.com/visionmedia/jspec.git
+[submodule "lib/env-js"]
+	path = lib/env-js
+	url = git://github.com/thatcher/env-js.git
