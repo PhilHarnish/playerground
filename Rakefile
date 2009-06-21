@@ -18,9 +18,15 @@ task :dobind do
   subcommand = 'bind'
 end
 
+desc 'Run in rhino'
+task :rhino => [:dorhino, :spec]
+task :dorhino do
+  subcommand = 'run --rhino'
+end
+
 desc 'Check specs'
 task :spec => [:install, 'spec/all.js'] do
-  sh "#{command} #{subcommand} --rhino #{paths}"
+  sh "#{command} #{subcommand} #{paths}"
 end
 
 # Generates all.js files
