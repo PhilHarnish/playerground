@@ -4,10 +4,8 @@ describe 'jQuery'
     $.should.not.be undefined
   end
   
-  it 'should create an em element'
-    dom = sandbox()
-    dom = $('<em>test</em>')
-    dom.should.have_text 'test'
+  it 'should create an element'
+    '<em>test</em>'.should.have_text 'test'
   end
   
   it 'should create a sandbox'

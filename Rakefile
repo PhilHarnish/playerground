@@ -1,6 +1,10 @@
 require 'rake'
 
+# Defaults
 task :default => [:spec]
+command = 'lib/jspec/bin/jspec'
+subcommand = 'run'
+paths = '-p src/**/*.js,site/**/*.js,spec/**/*.js'
 
 desc 'Install dependencies'
 task :install => ['site/javascripts/jquery.min.js',
@@ -8,9 +12,15 @@ task :install => ['site/javascripts/jquery.min.js',
   # wget missing files
 end
 
-desc 'Run specs'
+desc 'Continuously monitor code'
+task :bind => [:dobind, :spec]
+task :dobind do
+  subcommand = 'bind'
+end
+
+desc 'Check specs'
 task :spec => [:install, 'spec/all.js'] do
-  sh 'jspec run --rhino'
+  sh "#{command} #{subcommand} --rhino #{paths}"
 end
 
 # Generates all.js files
