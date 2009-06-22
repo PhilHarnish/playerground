@@ -13,13 +13,29 @@ describe 'tagged sets Array-like behavior'
   end
 end
 
-describe 'tagging tagged sets'
+describe 'tagging sets'
   before
-    set = new TaggedSet()
-    set.push(1, 2, 3)
+    list = [1, 2, 3]
+    set = new TaggedSet(list)
   end
 
   it 'should start without tags'
     set.tags.should.be_empty
+  end
+
+  it 'should tag everything in the set'
+    set.tag('integers')
+    set.tags.integers.should.eql list
+  end
+
+  it 'should not tag new items'
+    set.tag('numbers')
+    set.push(4, 5, 6)
+    set.tags.numbers.should.not.include 4, 5, 6
+  end
+
+  it 'should tag individual items'
+    set.tag(5, 'fingers')
+    set.tags.fingers.should.eql [5]
   end
 end

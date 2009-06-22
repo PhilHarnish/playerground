@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
-sources = ['base.js',
-           'taggedsets.js']
+sources = ['header.js',
+           'base.js',
+           'taggedsets.js',
+           'footer.js']
 output = 'site/javascripts/playerground.js'
 
 # Fix input paths
