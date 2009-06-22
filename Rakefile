@@ -1,7 +1,7 @@
 require 'rake'
 
 # Defaults
-task :default => [:spec]
+task :default => [:build]
 command = 'lib/jspec/bin/jspec'
 subcommand = 'run'
 paths = '-p src/**/*.js,site/**/*.js,spec/**/*.js,Rakefile'
@@ -29,6 +29,7 @@ task :spec => [:install, :build] do
   sh "#{command} #{subcommand} #{paths}"
 end
 
+desc 'Build static resources'
 multitask :build => ['site/index.html',
                      'spec/all.js',
                      'site/javascripts/playerground.js']

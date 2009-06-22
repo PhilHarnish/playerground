@@ -12,18 +12,18 @@ To install from source run the following commands:
 
 To build the source:
 
-    sudo gem install staticmatic
+    sudo gem install staticmatic rake
     # Build from source
-    staticmatic build .
+    rake
 
-After `staticmatic build` completes the `~/playerground/site` directory will contain the generated files. Note that `staticmatic preview` uses local versions of each javascript API dependency. Please download and provide missing javascript files.
+After rake completes the `~/playerground/site` directory will contain the generated files.
 
 To run the spec suite run the following commands:
 
     # Get dependencies:
     gem sources -a http://gems.github.com
     sudo gem install visionmedia-jspec
-    jspec run
+    rake spec
 
 [1]: http://code.google.com/apis/ajax/playground/?exp=youtube
 [2]: http://code.google.com/apis/youtube/player_parameters.html
