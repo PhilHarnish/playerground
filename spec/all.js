@@ -3,3 +3,4 @@ JSpec
 .exec(BASE + 'base/jquery.spec.js')
 .exec(BASE + 'base/pure.spec.js')
 .exec(BASE + 'base/spec.spec.js')
+.exec(BASE + 'lib/taggedsets.spec.js')

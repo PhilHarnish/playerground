@@ -4,7 +4,7 @@ require 'rake'
 task :default => [:spec]
 command = 'lib/jspec/bin/jspec'
 subcommand = 'run'
-paths = '-p src/**/*.js,site/**/*.js,spec/**/*.js'
+paths = '-p src/**/*.js,site/**/*.js,spec/**/*.js,Rakefile'
 
 desc 'Install dependencies'
 task :install => ['site/javascripts/jquery.min.js',
@@ -15,7 +15,7 @@ end
 desc 'Continuously monitor code'
 task :bind => [:dobind, :spec]
 task :dobind do
-  subcommand = 'bind'
+  subcommand = 'bind --actions "rake build"'
 end
 
 desc 'Run in rhino'
@@ -25,12 +25,25 @@ task :dorhino do
 end
 
 desc 'Check specs'
-task :spec => [:install, 'spec/all.js'] do
+task :spec => [:install, :build] do
   sh "#{command} #{subcommand} #{paths}"
 end
 
+multitask :build => ['site/index.html',
+                     'spec/all.js',
+                     'site/javascripts/playerground.js']
+
+file 'site/index.html' => FileList['src/**/*.haml', 'src/**/*.sass'] do
+  sh "staticmatic build ."
+end
+
+file 'site/javascripts/playerground.js' => FileList['src/js/**/*.js'] do
+  # Compile playerground.js
+  sh "src/compile.rb"
+end
+
 # Generates all.js files
-file "spec/all.js" => FileList['spec/**/*spec.js'] do
+file 'spec/all.js' => FileList['spec/**/*spec.js'] do
   # Add 'spec/**' to recursively build all.js files.
   Dir['spec'].each do |d|
     gen_all d if File.directory? d

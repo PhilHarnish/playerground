@@ -11,6 +11,7 @@ Envjs.log = function () {}
 window.onload = function () {
   load('lib/jspec/spec/jquery-1.3.1.js')
   load('lib/jspec/lib/jspec.jquery.js')
+  load('site/javascripts/playerground.js')
 
   JSpec
   .run({ formatter : JSpec.formatters.Terminal })
