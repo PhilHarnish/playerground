@@ -9,6 +9,9 @@ To install from source run the following commands:
     cd ~/playerground
     # Get dependencies:
     git submodule update --init lib/*
+
+To build the source:
+
     sudo gem install staticmatic
     # Build from source
     staticmatic build .
