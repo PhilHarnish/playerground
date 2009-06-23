@@ -3,5 +3,5 @@ JSpec
 .exec(BASE + 'base/jquery.spec')
 .exec(BASE + 'base/pure.spec')
 .exec(BASE + 'base/spec.spec')
-.exec(BASE + 'lib/proplist.spec')
-.exec(BASE + 'lib/taggedsets.spec')
+.exec(BASE + 'lib/PropertyMap.spec')
+.exec(BASE + 'lib/TaggedSet.spec')

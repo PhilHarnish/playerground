@@ -2,7 +2,8 @@
 
 sources = ['header.js',
            'base.js',
-           'taggedsets.js',
+           'lib/TaggedSet.js',
+           'lib/PropertyMap.js',
            'footer.js']
 output = 'site/javascripts/playerground.js'
 
