@@ -16,7 +16,7 @@ describe 'TaggedSet'
       set.add(1, ['a']).get('a').should.eql 1
     end
     
-    it 'should return no matching tags'
+    it 'should return only matching tags'
       set.add(1, ['a']).get('b').should.be_empty 
     end
   end

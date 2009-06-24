@@ -1,5 +1,5 @@
-describe 'PropertyMap population'
-  before
+describe 'PropertyMap'
+  before_each
     props = new PropertyMap();
   end
 
@@ -7,14 +7,22 @@ describe 'PropertyMap population'
     props.get().should.be_empty
   end
 
-  it 'should store properties'
-    props.add({rel: 0, autoplay: 1});
-    props.get().should.eql {rel: 0, autoplay: 1}
+  describe 'population'
+    it 'should store properties'
+      props.add({rel: '0', autoplay: '1'});
+      props.get().should.eql {rel: '0', autoplay: '1'}
+    end
   end
 
-  it 'should store tagged properties'
-    props.add({video_id: ['LONG_ID', 'long']});
-    props.get('nomatchingtags').should.be_empty
-    props.get('long').should.eql {video_id: 'LONG_ID'}
+  describe 'filtering'
+    it 'should ignore irrelevant filters'
+      props.add({rel: '0', autoplay: '1'});
+      props.get(['nomatchingtags']).should.eql {rel: '0', autoplay: '1'}
+    end
+
+    it 'should store and retrieve tagged properties'
+      props.add({video_id: ['LONG_ID_VALUE', 'long']});
+      props.get(['long']).should.eql {video_id: 'LONG_ID_VALUE'}
+    end
   end
 end
