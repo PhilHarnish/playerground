@@ -17,18 +17,22 @@ PropertyMap.prototype = {
           this.tags[tags[i]] = true;
         }
       }
+      console.log("Adding props[" + key + "] = ", value, "(" + tags + ")")
       this.props[key] = (new TaggedSet()).add(value, tags);
     }
   },
   get: function (tags) {
     var result = {};
     var whitelist = this.tags;
+    console.log("(", tags, ")");
     tags = $.grep(tags || [], function (tag) {
       return whitelist[tag];
     });
+    console.log("(", tags, ") from ", this.props);
     $.each(this.props, function (key, value) {
       var filtered = value.get(tags);
-      if (filtered) {
+      console.log("Reading ", value, " for ", tags, " found ", filtered, filtered instanceof PropertyMap);
+      if (filtered !== undefined) {
         result[key] = filtered instanceof PropertyMap ?
                       filtered.get(tags) : filtered;
       }

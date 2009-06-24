@@ -11,10 +11,10 @@ TaggedSet.prototype = {
     $.each(classList || [], function(i, c) {
       item.addClass(c);
     });
-    return this.append(item.append(value));
+    return this.append(item.data('value', value));
   },
   get: function(tags) {
-    return this.find(this.tagsToClass(tags)).eq(0).text();
+    return this.find(this.tagsToClass(tags)).eq(0).data('value');
   },
   tagsToClass: function(tags) {
     return $.map(
