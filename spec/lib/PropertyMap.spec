@@ -12,7 +12,7 @@ describe 'PropertyMap'
       props.add({rel: 0, autoplay: 1})
       props.get().should.eql {rel: 0, autoplay: 1}
     end
-    
+
     it 'should store arrays'
       props.add(['di5I49yg7bY', 'RDfpd8GV9dI'])
       props.get().should.eql {0: 'di5I49yg7bY', 1: 'RDfpd8GV9dI'}
