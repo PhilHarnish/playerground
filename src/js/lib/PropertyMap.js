@@ -17,7 +17,7 @@ PropertyMap.prototype = {
           this.tags[tags[i]] = true;
         }
       }
-      this.props[key] = (new TaggedSet()).add(value, tags);
+      this.props[key] = (new TaggedSet()).add(value, null, tags);
     }
   },
   get: function (tags) {
