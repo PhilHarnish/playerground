@@ -19,7 +19,7 @@ TaggedSet.prototype = {
   tagsToClass: function(tags) {
     return $.map(
       tags || [],
-      function(tag){
+      function(tag) {
         return '.' + tag;
       }
     ).join(',') || '*';
