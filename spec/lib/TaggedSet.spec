@@ -51,5 +51,9 @@ describe 'TaggedSet'
     it 'should store nested sets'
       set.open().get().should.match /child/
     end
+
+    it 'should traverse nested sets with tags'
+      set.open('B').get('a').should.equal 'child-Ba'
+    end
   end
 end
