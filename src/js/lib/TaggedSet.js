@@ -7,13 +7,7 @@ global.TaggedSet = TaggedSet;
 TaggedSet.prototype = {
   __proto__: $.fn,
   add: function(set, tags) {
-    var item = $('<span></span>');
-    if (set instanceof TaggedSet) {
-      item.append(set);
-      item.data('name', set.name());
-    } else {
-      item.data('name', set);
-    }
+    var item = (set instanceof TaggedSet) ? set : new TaggedSet(set);
     $.each(tags || [], function(i, c) {
       item.addClass(c);
     });
@@ -26,7 +20,7 @@ TaggedSet.prototype = {
     return this.children(this.tagsToClass(tags)).eq(0);
   },
   open: function(tags) {
-    return this.peek(tags).children().eq(0).data('set');
+    return this.peek(tags).data('set');
   },
   get: function(tags) {
     return this.peek(tags).data('name');
