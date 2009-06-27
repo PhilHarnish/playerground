@@ -17,27 +17,25 @@ describe 'TaggedSet'
 
   describe 'tagging'
     it 'should find tagged values'
-      set.add(1, null, ['a']).get('a').should.equal 1
+      set.add(1, ['a']).get('a').should.equal 1
     end
 
     it 'should return only matching tags'
-      set.add(1, null, ['a']).get('b').should.be_null
+      set.add(1, ['a']).get('b').should.be_null
     end
 
     it 'should distinguish tagged values'
-      set.add(1, null, ['a']).add(2, null, ['b']).get('a').should.equal 1
+      set.add(1, ['a']).add(2, ['b']).get('a').should.equal 1
     end
   end
 
   describe 'compound sets'
     before_each
-      set.add('parent-A',
-              (new TaggedSet('parent-A')).add('child-Aa', null, ['a'])
-                                         .add('child-Ab', null, ['b']),
+      set.add((new TaggedSet('parent-A')).add('child-Aa', ['a'])
+                                         .add('child-Ab', ['b']),
               ['A'])
-      set.add('parent-B',
-              (new TaggedSet('parent-B')).add('child-Ba', null, ['a'])
-                                         .add('child-Bb', null, ['b']),
+      set.add((new TaggedSet('parent-B')).add('child-Ba', ['a'])
+                                         .add('child-Bb', ['b']),
               ['B'])
     end
 

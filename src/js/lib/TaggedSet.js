@@ -1,14 +1,20 @@
 
 var TaggedSet = function (name) {
-  return this.init('<ul></ul>').data('set', this).data('name', name);
+  return this.init('<span></span>').data('set', this).data('name', name);
 };
 global.TaggedSet = TaggedSet;
 
 TaggedSet.prototype = {
   __proto__: $.fn,
-  add: function(name, children, classList) {
-    var item = $('<li></li>').append(children).data('name', name);
-    $.each(classList || [], function(i, c) {
+  add: function(set, tags) {
+    var item = $('<span></span>');
+    if (set instanceof TaggedSet) {
+      item.append(set);
+      item.data('name', set.name());
+    } else {
+      item.data('name', set);
+    }
+    $.each(tags || [], function(i, c) {
       item.addClass(c);
     });
     return this.append(item);
