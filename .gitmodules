@@ -7,3 +7,6 @@
 [submodule "lib/env-js"]
 	path = lib/env-js
 	url = git://github.com/thatcher/env-js.git
+[submodule "lib/jquery-enumerable"]
+	path = lib/jquery-enumerable
+	url = git://github.com/xaviershay/jquery-enumerable.git
