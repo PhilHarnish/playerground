@@ -14,7 +14,7 @@ window.onload = function () {
   load('site/javascripts/playerground.js')
 
   JSpec
-  .run({ formatter : JSpec.formatters.Terminal })
+  .run({ formatter : JSpec.formatters.Terminal, failuresOnly : true  })
   .report()
 };
 

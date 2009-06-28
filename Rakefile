@@ -21,7 +21,7 @@ end
 desc 'Run in rhino'
 task :rhino => [:dorhino, :spec]
 task :dorhino do
-  subcommand = 'run --rhino'
+  subcommand = 'bind --actions "rake build" --rhino'
 end
 
 desc 'Check specs'

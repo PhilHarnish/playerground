@@ -5,7 +5,6 @@ var TaggedSet = function (name) {
 global.TaggedSet = TaggedSet;
 
 TaggedSet.prototype = {
-  __proto__: $.fn,
   add: function(set, tags) {
     var item = (set instanceof TaggedSet) ? set : new TaggedSet(set);
     $.each(tags || [], function(i, c) {
@@ -34,3 +33,5 @@ TaggedSet.prototype = {
     ).join(',') || '*';
   }
 };
+// For whatever reason Rhino won't allow __proto__ to be defined above.
+TaggedSet.prototype.__proto__ = $.fn;
