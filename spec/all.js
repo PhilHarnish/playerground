@@ -4,4 +4,5 @@ JSpec
 .exec(BASE + 'base/pure.spec')
 .exec(BASE + 'base/spec.spec')
 .exec(BASE + 'lib/PropertyMap.spec')
+.exec(BASE + 'lib/PropertyParser.spec')
 .exec(BASE + 'lib/TaggedSet.spec')

@@ -4,7 +4,7 @@ require 'rake'
 task :default => [:build]
 command = 'lib/jspec/bin/jspec'
 subcommand = 'run'
-paths = '-p src/**/*.js,site/**/*.js,spec/**/*.spec,Rakefile'
+paths = '-p src,site/**/*.js,spec/**/*.spec,Rakefile'
 
 desc 'Install dependencies'
 task :install => ['site/javascripts/jquery.min.js',
