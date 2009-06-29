@@ -3,6 +3,7 @@
 sources = ['header.js',
            'base.js',
            'lib/TaggedSet.js',
+           'lib/TaggedMap.js',
            'lib/PropertyMap.js',
            'lib/PropertyParser.js',
            'footer.js']
